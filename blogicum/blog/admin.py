@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import Category, Location, Post
 
+
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         'title',
@@ -17,8 +18,8 @@ class PostAdmin(admin.ModelAdmin):
         'is_published',
         'pub_date',
         'category'
-    )    
-    search_fields = ('title',) 
+    )
+    search_fields = ('title',)
     list_filter = ('category', 'author')
     list_display_links = ('title',)
 
@@ -33,15 +34,16 @@ class CategoryAdmin(admin.ModelAdmin):
         PostInline,
     )
     list_display = (
-        'title',        
+        'title',
     )
+
 
 class LocationAdmin(admin.ModelAdmin):
     inlines = (
         PostInline,
     )
     list_display = (
-        'name',        
+        'name',
     )
 
 

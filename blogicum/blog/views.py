@@ -3,10 +3,10 @@ from blog.models import Post, Category
 from datetime import datetime
 
 Posts = Post.objects.select_related('category', 'location').filter(
-        pub_date__lte=datetime.now(),
-        is_published=True,
-        category__is_published=True,
-    )
+    pub_date__lte=datetime.now(),
+    is_published=True,
+    category__is_published=True,
+)
 
 
 def index(request):
