@@ -5,7 +5,7 @@ from django.db import models
 
 from core.models import BaseModel
 
-from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH #, NOW
+from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH
 
 sys.path.append("..")
 User = get_user_model()
@@ -117,4 +117,3 @@ class Post(BaseModel):
             self.title if len(self.title) <= MAX_NAME_LENGTH
             else f'{self.title[:MAX_NAME_LENGTH]}...'
         )
-
