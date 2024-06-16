@@ -4,15 +4,15 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render
 
 from .models import Category, Post
 
-sys.path.append("..")
 from blogicum.constants import NOW, POSTS_NUMBER
 
 # Posts = Post.active_posts.valid()
-Posts = Post.objects.select_related('category', 'location').filter( 
-    pub_date__lte=NOW, 
-    is_published=True, 
-    category__is_published=True, 
-) 
+sys.path.append("..")
+Posts = Post.objects.select_related('category', 'location').filter(
+    pub_date__lte=NOW,
+    is_published=True,
+    category__is_published=True,
+)
 
 
 def index(request):
@@ -43,7 +43,8 @@ def category_posts(request, category_slug):
     # Может быть я забываю про какой-то импорт?
     post_list = get_list_or_404(Posts.filter(category=category))
     # Если убираю get_list_or_404 - не проходит тест.
-    # 'Убедитесь, что страница категории, снятой с публикации, возвращает статус 404.'
+    # 'Убедитесь, что страница категории, снятой с публикации,
+    # возвращает статус 404.'
     return render(
         request,
         'blog/category.html',

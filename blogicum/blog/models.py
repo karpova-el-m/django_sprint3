@@ -5,9 +5,9 @@ from django.db import models
 
 from core.models import BaseModel
 
-sys.path.append("..")
-from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH, NOW
+from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH #, NOW
 
+sys.path.append("..")
 User = get_user_model()
 
 # class PostsManager(models.Manager):
@@ -62,7 +62,7 @@ class Category(BaseModel):
             self.title if len(self.title) <= MAX_NAME_LENGTH
             else f'{self.title[:MAX_NAME_LENGTH]}...'
         )
-    
+
 
 class Post(BaseModel):
     title = models.CharField(
@@ -94,7 +94,7 @@ class Post(BaseModel):
     )
     location = models.ForeignKey(
         Location,
-        related_name = 'locations',
+        related_name='locations',
         on_delete=models.SET_NULL,
         null=True,
         verbose_name='Местоположение'
@@ -107,7 +107,6 @@ class Post(BaseModel):
         verbose_name='Категория',
     )
 
-
     class Meta(BaseModel.Meta):
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
@@ -118,4 +117,4 @@ class Post(BaseModel):
             self.title if len(self.title) <= MAX_NAME_LENGTH
             else f'{self.title[:MAX_NAME_LENGTH]}...'
         )
-    
+
