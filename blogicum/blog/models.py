@@ -6,6 +6,7 @@ from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH, NOW
 
 User = get_user_model()
 
+
 class PostsManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(
@@ -91,7 +92,7 @@ class Post(BaseModel):
     )
     active_posts = PostsManager()
     objects = models.Manager()
-    
+
     class Meta():
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
