@@ -1,22 +1,18 @@
-import sys
-
 from django.contrib.auth import get_user_model
 from django.db import models
 
 from core.models import BaseModel
+from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH, NOW
 
-from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH
-
-sys.path.append("..")
 User = get_user_model()
 
-# class PostsManager(models.Manager):
-#     def valid(self):
-#         return self.filter(
-#             pub_date__lte=NOW,
-#             is_published=True,
-#             category__is_published=True,
-#         )
+class PostsManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            pub_date__lte=NOW,
+            is_published=True,
+            category__is_published=True,
+        )
 
 
 class Location(BaseModel):
@@ -30,10 +26,7 @@ class Location(BaseModel):
         verbose_name_plural = 'Местоположения'
 
     def __str__(self):
-        return (
-            self.name if len(self.name) <= MAX_NAME_LENGTH
-            else f'{self.name[:MAX_NAME_LENGTH]}...'
-        )
+        return self.name[:MAX_NAME_LENGTH]
 
 
 class Category(BaseModel):
@@ -58,10 +51,7 @@ class Category(BaseModel):
         verbose_name_plural = 'Категории'
 
     def __str__(self):
-        return (
-            self.title if len(self.title) <= MAX_NAME_LENGTH
-            else f'{self.title[:MAX_NAME_LENGTH]}...'
-        )
+        return self.title[:MAX_NAME_LENGTH]
 
 
 class Post(BaseModel):
@@ -80,13 +70,6 @@ class Post(BaseModel):
             '— можно делать отложенные публикации.'
         ),
     )
-    # active_posts = PostsManager()
-    # Если здесь переопределяю objects = PostsManager(),
-    # То во views Post.objects.valid() не работает -
-    # не распознает objects через точечную нотацию.
-    # Post.active_posts.valid() - работает.
-    # Но не проходит 2 теста - Post has no attribute 'objects'.
-    # Как быть в этом случае?
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -94,7 +77,7 @@ class Post(BaseModel):
     )
     location = models.ForeignKey(
         Location,
-        related_name='locations',
+        related_name='posts',
         on_delete=models.SET_NULL,
         null=True,
         verbose_name='Местоположение'
@@ -102,18 +85,17 @@ class Post(BaseModel):
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
-        related_name='categories',
+        related_name='posts',
         null=True,
         verbose_name='Категория',
     )
-
-    class Meta(BaseModel.Meta):
+    active_posts = PostsManager()
+    objects = models.Manager()
+    
+    class Meta():
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
         ordering = ['-pub_date']
 
     def __str__(self):
-        return (
-            self.title if len(self.title) <= MAX_NAME_LENGTH
-            else f'{self.title[:MAX_NAME_LENGTH]}...'
-        )
+        return self.title[:MAX_NAME_LENGTH]

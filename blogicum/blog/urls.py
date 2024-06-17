@@ -11,9 +11,7 @@ urlpatterns = [
         name='index'
     ),
     path(
-        'posts/<int:pk>/',
-        # тут не поняла, что нужно исправить/удалить - ведь по этому pk
-        # мы получаем доступ к нужному посту в views
+        'posts/<int:post_рк>/',
         views.post_detail,
         name='post_detail'
     ),
