@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
 
 from core.models import BaseModel
-from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH, NOW
+from blogicum.constants import MAX_LENGTH, MAX_NAME_LENGTH
 
 User = get_user_model()
 
@@ -10,7 +11,7 @@ User = get_user_model()
 class PostsManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(
-            pub_date__lte=NOW,
+            pub_date__lte=timezone.now(),
             is_published=True,
             category__is_published=True,
         )
@@ -90,7 +91,8 @@ class Post(BaseModel):
         null=True,
         verbose_name='Категория',
     )
-    active_posts = PostsManager()
+
+    published_posts = PostsManager()
     objects = models.Manager()
 
     class Meta():

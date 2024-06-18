@@ -3,10 +3,9 @@ from django.shortcuts import get_object_or_404, render
 from .models import Category, Post
 from blogicum.constants import POSTS_NUMBER
 
-Posts = Post.active_posts.get_queryset()
-
 
 def index(request):
+    Posts = Post.published_posts.get_queryset()
     return render(
         request,
         'blog/index.html',
@@ -15,6 +14,7 @@ def index(request):
 
 
 def post_detail(request, post_рк):
+    Posts = Post.published_posts.get_queryset()
     post_detail = get_object_or_404(
         Posts,
         pk=post_рк
